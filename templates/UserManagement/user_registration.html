@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+<style>
+    .form-check-input{
+        padding: 100px !important;
+        background-color: black;
+    }
+    .errorlist{
+        color: red;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="container mt-5 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h3>User Registration</h3>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.first_name.label_tag }}
+                        {{ form.first_name }}
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.last_name.label_tag }}
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.address.label_tag }}
+                        {{ form.address }}
+                        {{ form.address.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.dob.label_tag }}
+                        {{ form.dob }}
+                        {{ form.dob.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.gender.label_tag }}
+                        {{ form.gender }}
+                        {{ form.gender.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.profile_image.label_tag }}
+                        {{ form.profile_image }}
+                        {{ form.profile_image.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.email.label_tag }}
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.phone_number.label_tag }}
+                        {{ form.phone_number }}
+                        {{ form.phone_number.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.password.label_tag }}
+                        {{ form.password }}
+                        {{ form.password.errors }}
+                    </div>
+                   
+                    <div class="form-group">
+                        <label for="roles">Role </label>
+                        <select name="roles" id="roles">
+                           <option value="">Select</option>
+                           {% for data in role %}
+                           <option value="{{data.id}}">{{data.name}}</option>
+                           {% endfor %}
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        {{ form.maker.label_tag }}
+                        {{ form.maker }}
+                        {{ form.maker.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.checker.label_tag }}
+                        {{ form.checker }}
+                        {{ form.checker.errors }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.is_admin.label_tag }}
+                        {{ form.is_admin }}
+                        {{ form.is_admin.errors }}
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

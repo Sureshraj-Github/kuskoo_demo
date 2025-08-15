@@ -1,0 +1,340 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+
+{% comment %} <!DOCTYPE html>
+<html lang="en"> {% endcomment %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Export the Data </title>
+
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #45a049;
+            --background-color: #f4f4f4;
+            --card-background: #ffffff;
+            --text-color: #333333;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            background-color: var(--background-color);
+            color: var(--text-color);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: var(--card-background);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .field-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .field-item input[type="checkbox"] {
+            margin-right: 0.5rem;
+        }
+
+        .export-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1.5rem;
+        }
+
+        select, button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        select {
+            background-color: var(--card-background);
+        }
+
+        button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .selected-fields {
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        #output {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background-color: var(--background-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            white-space: pre-wrap;
+        }
+
+        @media (max-width: 600px) {
+            .export-options {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .export-options > * {
+                margin-bottom: 1rem;
+            }
+        }
+    </style>
+    
+</head>
+    <br><br>
+    <div class="container"><br>
+        <h2>Export the Data For {{model_name}}</h2>
+        <br>
+        <ul class="field-grid" id="fieldList">
+        {% for data in record %}
+            <li class="field-item">
+                <label>
+                    <input type="checkbox" name="field" value="{{data}}"> {{data}}
+                </label>
+            </li>
+        {% endfor %}
+        
+        </ul>
+        <div class="selected-fields" id="selectedFields"></div>
+
+    
+        <div class="export-options">
+                <select id="exportFormat" required>
+                    <option value="csv">CSV</option>
+                    <option value="excel">Excel</option>
+                </select>
+                <button id="generateBtn">Generate and Download</button>
+        </div>
+     
+        {% comment %} <pre id="output"></pre> {% endcomment %}
+        {% comment %} <div id="output" class="output"></div> {% endcomment %}
+    </div>
+    
+
+   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fieldList = document.getElementById('fieldList');
+            const exportFormat = document.getElementById('exportFormat');
+            const generateBtn = document.getElementById('generateBtn');
+
+            generateBtn.addEventListener('click', generateAndDownload);
+
+            function generateAndDownload() {
+                const checkedBoxes = fieldList.querySelectorAll('input[type="checkbox"]:checked');
+                const selectedFields = Array.from(checkedBoxes).map(cb => cb.value);
+                const format = exportFormat.value;
+                    
+                if (selectedFields.length === 0) {
+                    alert('Please select at least one field.');
+                    return;
+                }
+
+                let content = '';
+                let fileName = '';
+                let mimeType = '';
+             
+                if (format === 'csv') {
+                    // If a project is selected, make the AJAX request to get stock options
+
+                        if (selectedFields) {
+                        
+                        $.ajax({
+                                url: "{% url 'get_field_from_be' %}",  // URL for the view that handles AJAX
+                                
+                                data: {
+                                'app_name': '{{app_name}}' , // Pass the selected project code
+                                'selectedFields': selectedFields,  // Pass the selected project code
+                                'model_name': '{{model_name}}' , // Pass the selected project code
+                                },
+                                
+                                success: function(data) {
+                                    if (data.field) {
+                                                                                        
+                                        // Call the function to generate CSV with the received 'field' data
+                                        content = generateCSV(data.field);
+                                        fileName = '{{model_name}}.csv';
+                                        mimeType = 'text/csv;charset=utf-8;';
+                                        
+                                        // Create a blob and initiate download
+                                        var blob = new Blob([content], { type: mimeType });
+                                        var link = document.createElement('a');
+                                        link.href = URL.createObjectURL(blob);
+                                        link.download = fileName;
+                                        link.click();
+                                    }
+                                },
+                                error: function() {
+                                    alert('Error loading field data not found.');
+                                }
+                               
+                        });
+                        }
+                } else {
+                    if (selectedFields) {
+                    $.ajax({
+                        url: "{% url 'get_field_from_be' %}",  // URL for the view that handles AJAX
+                        
+                        data: {
+                        'app_name': '{{app_name}}' , // Pass the selected project code
+                        'selectedFields': selectedFields,  // Pass the selected project code
+                        'model_name': '{{model_name}}' , // Pass the selected project code
+                        },
+                        
+                        success: function(data) {
+                            if (data.field) {
+                                                                                
+                                // Call the function to generate CSV with the received 'field' data
+                                content = generateExcel(data.field);
+                                
+                            }
+                        },
+                        error: function() {
+                            alert('Error loading field data not found.');
+                        }
+                       
+                });
+                }
+                    
+                }
+
+            }
+
+            function generateCSV(data) {
+                // Extract headers from the first object
+                const headers = Object.keys(data[0]);
+                const rows = data.map(row => headers.map(fieldName => row[fieldName]).join(','));
+            
+                // Add headers as the first row
+                const csv = [headers.join(','), ...rows].join('\n');
+            
+                return csv;
+            }
+
+            function generateExcel(data) {
+                // Create a new workbook
+                const wb = XLSX.utils.book_new();
+                
+                // Extract headers from the first object
+                const headers = Object.keys(data[0]);
+                
+                // Map data to an array of rows
+                const rows = data.map(row => headers.map(fieldName => row[fieldName]));
+                
+                // Add the headers as the first row
+                rows.unshift(headers);
+                
+                // Create a worksheet from the rows
+                const ws = XLSX.utils.aoa_to_sheet(rows);
+                
+                // Append the worksheet to the workbook
+                XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+                
+                // Generate the Excel file and trigger download
+                XLSX.writeFile(wb, '{{model_name}}.xlsx');
+            }
+
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fieldList = document.getElementById('fieldList');
+            const selectedFields = document.getElementById('selectedFields');
+            const generateBtn = document.getElementById('generateBtn');
+            const output = document.getElementById('output');
+
+            fieldList.addEventListener('change', updateSelectedFields);
+            generateBtn.addEventListener('click', generateOutput);
+
+            function updateSelectedFields() {
+                const checkedBoxes = fieldList.querySelectorAll('input[type="checkbox"]:checked');
+                const selectedValues = Array.from(checkedBoxes).map(cb => cb.value);
+                
+                if (selectedValues.length > 0) {
+                    selectedFields.textContent = 'Selected fields: ' + selectedValues.join(', ');
+                } else {
+                    selectedFields.textContent = 'No fields selected';
+                }
+            }
+
+            function generateOutput() {
+                const checkedBoxes = fieldList.querySelectorAll('input[type="checkbox"]:checked');
+                const selectedValues = Array.from(checkedBoxes).map(cb => cb.value);
+                const format = document.querySelector('input[name="format"]:checked').value;
+
+                if (selectedValues.length === 0) {
+                    output.textContent = 'Please select at least one field.';
+                    return;
+                }
+
+                let result = '';
+                if (format === 'csv') {
+                    result = generateCSV(selectedValues);
+                } else {
+                    result = generateExcel(selectedValues);
+                }
+
+                output.textContent = result;
+            }
+
+            function generateCSV(fields) {
+                let csv = fields.join(',') + '\n';
+                // Generate sample data
+                for (let i = 0; i < 3; i++) {
+                    csv += fields.map(field => `${field}${i + 1}`).join(',') + '\n';
+                }
+                return csv;
+            }
+
+            function generateExcel(fields) {
+                let excel = 'Excel format (tab-separated):\n\n';
+                excel += fields.join('\t') + '\n';
+                // Generate sample data
+                for (let i = 0; i < 3; i++) {
+                    excel += fields.map(field => `${field}${i + 1}`).join('\t') + '\n';
+                }
+                return excel;
+            }
+
+            // Initial update
+            updateSelectedFields();
+        });
+    </script>
+{% comment %} </html> {% endcomment %}
+
+{% endblock %}

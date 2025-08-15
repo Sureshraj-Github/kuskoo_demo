@@ -1,0 +1,510 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF‑8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Compliance Dashboard | Modern Light Theme</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+   <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: #334155;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(79, 70, 229, 0.2);
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .dashboard-title h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #1e293b;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -1px;
+        }
+        
+        .dashboard-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #4f46e5, #7c3aed);
+            border-radius: 3px;
+        }
+        
+        .dashboard-title p {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 700px;
+            margin: 30px auto 0;
+            line-height: 1.6;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            border: 1px solid rgba(241, 245, 249, 0.8);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(79, 70, 229, 0.15);
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .card-1::before { background: linear-gradient(90deg, #4f46e5, #7c3aed); }
+        .card-2::before { background: linear-gradient(90deg, #ec4899, #f43f5e); }
+        .card-3::before { background: linear-gradient(90deg, #0ea5e9, #06b6d4); }
+        .card-4::before { background: linear-gradient(90deg, #f59e0b, #f97316); }
+        .card-5::before { background: linear-gradient(90deg, #10b981, #22c55e); }
+        .card-6::before { background: linear-gradient(90deg, #64748b, #475569); }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 32px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-1 .card-icon { background: linear-gradient(135deg, #4f46e5, #7c3aed); }
+        .card-2 .card-icon { background: linear-gradient(135deg, #ec4899, #f43f5e); }
+        .card-3 .card-icon { background: linear-gradient(135deg, #0ea5e9, #06b6d4); }
+        .card-4 .card-icon { background: linear-gradient(135deg, #f59e0b, #f97316); }
+        .card-5 .card-icon { background: linear-gradient(135deg, #10b981, #22c55e); }
+        .card-6 .card-icon { background: linear-gradient(135deg, #64748b, #475569); }
+        
+        .card:hover .card-icon {
+            transform: scale(1.1);
+        }
+        
+        .card-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #1e293b;
+        }
+        
+        .card-content p {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .card-hover-effect {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.05) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .card:hover .card-hover-effect {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 30px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .stat-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .card-1 .stat-badge { background: rgba(79, 70, 229, 0.1); color: #4f46e5; }
+        .card-2 .stat-badge { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+        .card-3 .stat-badge { background: rgba(14, 165, 233, 0.1); color: #0ea5e9; }
+        .card-4 .stat-badge { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .card-5 .stat-badge { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .card-6 .stat-badge { background: rgba(100, 116, 139, 0.1); color: #64748b; }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .user-info {
+                margin: 0 auto;
+            }
+            
+            .dashboard-title h2 {
+                font-size: 32px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation effects */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .card {
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .card:nth-child(2) { animation-delay: 0.8s; }
+        .card:nth-child(3) { animation-delay: 1.6s; }
+        .card:nth-child(4) { animation-delay: 2.4s; }
+        .card:nth-child(5) { animation-delay: 3.2s; }
+        .card:nth-child(6) { animation-delay: 4s; }
+        
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+        }
+        
+        .header-button {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #4f46e5;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        }
+        
+        .header-button:hover {
+            background: #4f46e5;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .header-button i {
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <a href="{% url 'main_dashboard' %}" style="text-decoration: none;">
+      <header>
+        <div class="logo">
+          <div class="logo-icon"><i class="fas fa-shield-alt"></i></div>
+          <div class="logo-text">
+            <h1>ComplyGuard</h1>
+            <p>Compliance Management System</p>
+          </div>
+        </div>
+        <div class="user-info">
+          <div class="user-avatar">JD</div>
+          <div>
+            <div style="font-weight: 600;">John Doe</div>
+            <div style="font-size: 14px; color: #64748b;">Compliance Manager</div>
+          </div>
+        </div>
+      </header>
+    </a>
+
+    <div class="dashboard-title">
+      <h2>Compliance Dashboard</h2>
+      <p>Monitor and manage all compliance-related activities in one interface.</p>
+      <div class="header-buttons">
+        <div class="header-button"><i class="fas fa-sync-alt"></i> Refresh Data</div>
+        <div class="header-button"><i class="fas fa-download"></i> Export Report</div>
+        <div class="header-button"><i class="fas fa-cog"></i> Settings</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Policy Management -->
+      <div class="card card-1" onclick="location.href='{% url 'policy' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-file-contract"></i></div>
+        <div class="card-content">
+          <h3>Policy Management</h3>
+          <p>Create, edit, and manage organizational policies and procedures.</p>
+        </div>
+      </div>
+
+      <!-- Breach Management -->
+      <div class="card card-2" onclick="location.href='{% url 'breach' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-exclamation-triangle"></i></div>
+        <div class="card-content">
+          <h3>Breach Management</h3>
+          <p>Track and resolve policy breaches efficiently.</p>
+        </div>
+      </div>
+
+      <!-- Staff Policy Acknowledgments -->
+      <div class="card card-3" onclick="location.href='{% url 'staffpolicyacknowledgment' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-user-check"></i></div>
+        <div class="card-content">
+          <h3>Staff Acknowledgments</h3>
+          <p>Monitor staff compliance acknowledgments and reminders.</p>
+        </div>
+      </div>
+
+      <!-- Incident Management -->
+      <div class="card card-4" onclick="location.href='{% url 'incident' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-fire"></i></div>
+        <div class="card-content">
+          <h3>Incident Management</h3>
+          <p>Log and manage compliance incidents with clear tracking.</p>
+        </div>
+      </div>
+
+      <!-- Corrective Actions -->
+      <div class="card card-5" onclick="location.href='{% url 'correctiveaction' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-tools"></i></div>
+        <div class="card-content">
+          <h3>Corrective Actions</h3>
+          <p>Assign and monitor corrective actions following incidents.</p>
+        </div>
+      </div>
+
+      <!-- Audit Evidence -->
+      <div class="card card-6" onclick="location.href='{% url 'auditevidence' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-search"></i></div>
+        <div class="card-content">
+          <h3>Audit Evidence</h3>
+          <p>Compile and manage documentation for compliance audits.</p>
+        </div>
+      </div>
+
+      <!-- Compliance Calendar Events -->
+      <div class="card card-1" onclick="location.href='{% url 'compliancecalendarevent' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-calendar-alt"></i></div>
+        <div class="card-content">
+          <h3>Calendar Events</h3>
+          <p>Schedule and oversee key compliance calendar events.</p>
+        </div>
+      </div>
+
+      <!-- Risk Control Matrix -->
+      <div class="card card-2" onclick="location.href='{% url 'riskcontrolmatrix' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-th-large"></i></div>
+        <div class="card-content">
+          <h3>Risk Control Matrix</h3>
+          <p>View risk assessments and control matrices in one place.</p>
+        </div>
+      </div>
+
+      <!-- Compliance Returns -->
+      <div class="card card-3" onclick="location.href='{% url 'compliancereturn' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <div class="card-content">
+          <h3>Compliance Returns</h3>
+          <p>Manage and submit regulatory compliance returns on time.</p>
+        </div>
+      </div>
+
+      <!-- Watchlist Checks -->
+      <div class="card card-4" onclick="location.href='{% url 'watchlistcheck' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-eye"></i></div>
+        <div class="card-content">
+          <h3>Watchlist Checks</h3>
+          <p>Perform and monitor compliance watchlist checks with ease.</p>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 ComplyGuard | Compliance Dashboard</p>
+    </footer>
+  </div>
+
+  <script>
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        const ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+        ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+        ripple.style.background = 'rgba(79, 70, 229, 0.2)';
+        ripple.style.position = 'absolute';
+        ripple.style.borderRadius = '50%';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'ripple 600ms linear';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to { transform: scale(4); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>

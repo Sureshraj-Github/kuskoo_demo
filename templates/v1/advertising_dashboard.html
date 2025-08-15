@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MediaPulse | Publishing, Media & Advertising</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: #334155;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(255, 107, 107, 0.2);
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #ec4899);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .dashboard-title h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #1e293b;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -1px;
+        }
+        
+        .dashboard-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #ff6b6b, #ff8e53);
+            border-radius: 3px;
+        }
+        
+        .dashboard-title p {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 700px;
+            margin: 30px auto 0;
+            line-height: 1.6;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            border: 1px solid rgba(241, 245, 249, 0.8);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(255, 107, 107, 0.15);
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .card-1::before { background: linear-gradient(90deg, #ff6b6b, #ff8e53); }
+        .card-2::before { background: linear-gradient(90deg, #4cc9f0, #4361ee); }
+        .card-3::before { background: linear-gradient(90deg, #f72585, #b5179e); }
+        .card-4::before { background: linear-gradient(90deg, #4895ef, #3f37c9); }
+        .card-5::before { background: linear-gradient(90deg, #2ec4b6, #1a936f); }
+        .card-6::before { background: linear-gradient(90deg, #ff9e00, #ff5400); }
+        .card-7::before { background: linear-gradient(90deg, #7209b7, #560bad); }
+        .card-8::before { background: linear-gradient(90deg, #06d6a0, #118ab2); }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 32px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-1 .card-icon { background: linear-gradient(135deg, #ff6b6b, #ff8e53); }
+        .card-2 .card-icon { background: linear-gradient(135deg, #4cc9f0, #4361ee); }
+        .card-3 .card-icon { background: linear-gradient(135deg, #f72585, #b5179e); }
+        .card-4 .card-icon { background: linear-gradient(135deg, #4895ef, #3f37c9); }
+        .card-5 .card-icon { background: linear-gradient(135deg, #2ec4b6, #1a936f); }
+        .card-6 .card-icon { background: linear-gradient(135deg, #ff9e00, #ff5400); }
+        .card-7 .card-icon { background: linear-gradient(135deg, #7209b7, #560bad); }
+        .card-8 .card-icon { background: linear-gradient(135deg, #06d6a0, #118ab2); }
+        
+        .card:hover .card-icon {
+            transform: scale(1.1);
+        }
+        
+        .card-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #1e293b;
+        }
+        
+        .card-content p {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .card-hover-effect {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 107, 107, 0.05) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .card:hover .card-hover-effect {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 30px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .stat-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .card-1 .stat-badge { background: rgba(255, 107, 107, 0.1); color: #ff6b6b; }
+        .card-2 .stat-badge { background: rgba(76, 201, 240, 0.1); color: #4cc9f0; }
+        .card-3 .stat-badge { background: rgba(247, 37, 133, 0.1); color: #f72585; }
+        .card-4 .stat-badge { background: rgba(72, 149, 239, 0.1); color: #4895ef; }
+        .card-5 .stat-badge { background: rgba(46, 196, 182, 0.1); color: #2ec4b6; }
+        .card-6 .stat-badge { background: rgba(255, 158, 0, 0.1); color: #ff9e00; }
+        .card-7 .stat-badge { background: rgba(114, 9, 183, 0.1); color: #7209b7; }
+        .card-8 .stat-badge { background: rgba(6, 214, 160, 0.1); color: #06d6a0; }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .user-info {
+                margin: 0 auto;
+            }
+            
+            .dashboard-title h2 {
+                font-size: 32px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation effects */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .card {
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .card:nth-child(2) { animation-delay: 0.8s; }
+        .card:nth-child(3) { animation-delay: 1.6s; }
+        .card:nth-child(4) { animation-delay: 2.4s; }
+        .card:nth-child(5) { animation-delay: 3.2s; }
+        .card:nth-child(6) { animation-delay: 4s; }
+        .card:nth-child(7) { animation-delay: 4.8s; }
+        .card:nth-child(8) { animation-delay: 5.6s; }
+        
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .header-button {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #ff6b6b;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        }
+        
+        .header-button:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .header-button i {
+            margin-right: 8px;
+        }
+        
+        .module-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .module-tab {
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .module-tab.active {
+            background: #ff6b6b;
+            color: white;
+        }
+        
+        .module-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <a href="{% url 'main_dashboard' %}" style="text-decoration: none;">
+        <header>
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-broadcast-tower"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>MediaPulse</h1>
+                    <p>Publishing, Media & Advertising Platform</p>
+                </div>
+            </div>
+            <div class="user-info">
+                <div class="user-avatar">CD</div>
+                <div>
+                    <div style="font-weight: 600;">Carla Davis</div>
+                    <div style="font-size: 14px; color: #64748b;">Media Director</div>
+                </div>
+            </div>
+        </header>
+        </a>
+        
+        <div class="dashboard-title">
+            <h2>Publishing & Media Dashboard</h2>
+            <p>Centralized platform for managing all publishing, media, and advertising operations with real-time analytics and content insights.</p>
+            
+            <div class="module-tabs">
+                <div class="module-tab active">Dashboard</div>
+                <div class="module-tab">Content Management</div>
+                <div class="module-tab">Advertising</div>
+                <div class="module-tab">Analytics</div>
+                <div class="module-tab">Subscriptions</div>
+            </div>
+            
+            <div class="header-buttons">
+                <div class="header-button">
+                    <i class="fas fa-sync-alt"></i> Refresh Data
+                </div>
+                <div class="header-button">
+                    <i class="fas fa-download"></i> Export Report
+                </div>
+                <div class="header-button">
+                    <i class="fas fa-cog"></i> Settings
+                </div>
+            </div>
+        </div>
+        
+        <div class="cards-grid">
+            <!-- Social Post Management -->
+            <div class="card card-1" onclick="location.href='{% url 'socialpost' %}'">
+                <div class="card-hover-effect" style="top: -50px; right: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Social Post Management</h3>
+                    <p>Schedule, publish, and monitor social media content across all platforms with unified analytics.</p>
+                    <div class="stat-badge">5 scheduled posts</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">24</div>
+                            <div class="stat-label">This Week</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">18K</div>
+                            <div class="stat-label">Engagements</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Compliance Banner -->
+            <div class="card card-2" onclick="location.href='{% url 'compliancebanner' %}';">
+                <div class="card-hover-effect" style="top: -50px; left: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-flag"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Compliance Banner</h3>
+                    <p>Manage regulatory compliance banners and disclosures for all published content and campaigns.</p>
+                    <div class="stat-badge">3 updates needed</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">42</div>
+                            <div class="stat-label">Active Banners</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">98%</div>
+                            <div class="stat-label">Compliant</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Content Item Management -->
+            <div class="card card-3" onclick="location.href='{% url 'contentitem' %}';">
+                <div class="card-hover-effect" style="bottom: -50px; right: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Content Item Management</h3>
+                    <p>Organize and manage all digital content assets including articles, videos, and multimedia.</p>
+                    <div class="stat-badge">12 new drafts</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">1.2K</div>
+                            <div class="stat-label">Total Items</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">87</div>
+                            <div class="stat-label">Published</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Subscription Management -->
+            <div class="card card-4" onclick="location.href='{% url 'subscription' %}';">
+                <div class="card-hover-effect" style="bottom: -50px; left: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-user-plus"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Subscription Management</h3>
+                    <p>Manage subscriber accounts, premium content access, and membership levels.</p>
+                    <div class="stat-badge">25 renewals today</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">12.5K</div>
+                            <div class="stat-label">Subscribers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">4.8%</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Media Asset Management -->
+            <div class="card card-5" onclick="location.href='{% url 'mediaasset' %}';">
+                <div class="card-hover-effect" style="top: -50px; left: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-photo-video"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Media Asset Management</h3>
+                    <p>Central repository for all media assets with metadata tagging and version control.</p>
+                    <div class="stat-badge">45 new uploads</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">8.7K</div>
+                            <div class="stat-label">Assets</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">1.2TB</div>
+                            <div class="stat-label">Storage</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Ad Booking Management -->
+            <div class="card card-6" onclick="location.href='{% url 'adbooking' %}';">
+                <div class="card-hover-effect" style="bottom: -50px; right: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-ad"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Ad Booking Management</h3>
+                    <p>Manage advertising slots, campaigns, and placements across all platforms.</p>
+                    <div class="stat-badge">7 campaigns live</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">$128K</div>
+                            <div class="stat-label">Revenue</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">32</div>
+                            <div class="stat-label">Active</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Newsletter Management -->
+            <div class="card card-7" onclick="location.href='{% url 'newsletter' %}';">
+                <div class="card-hover-effect" style="top: -50px; right: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-newspaper"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Newsletter Management</h3>
+                    <p>Create, schedule, and analyze performance of email newsletters and campaigns.</p>
+                    <div class="stat-badge">Scheduled: Tomorrow</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">42%</div>
+                            <div class="stat-label">Open Rate</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">8.7%</div>
+                            <div class="stat-label">CTR</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Web Analytics -->
+            <div class="card card-8" onclick="location.href='{% url 'webanalytics' %}';">
+                <div class="card-hover-effect" style="bottom: -50px; left: -50px;"></div>
+                <div class="card-icon">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="card-content">
+                    <h3>Web Analytics</h3>
+                    <p>Comprehensive analytics for website traffic, user behavior, and content performance.</p>
+                    <div class="stat-badge">1.2M visits this month</div>
+                    <div class="card-stats">
+                        <div class="stat">
+                            <div class="stat-value">3.2M</div>
+                            <div class="stat-label">Pageviews</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">2:45</div>
+                            <div class="stat-label">Avg. Time</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>© 2025 MediaPulse Publishing Platform | Last updated: Today at 14:45</p>
+        </footer>
+    </div>
+    
+    <script>
+        // Add ripple effect to cards
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('click', function(e) {
+                let ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                
+                const rect = this.getBoundingClientRect();
+                const size = Math.max(rect.width, rect.height);
+                
+                ripple.style.width = ripple.style.height = size + 'px';
+                ripple.style.left = e.clientX - rect.left - size/2 + 'px';
+                ripple.style.top = e.clientY - rect.top - size/2 + 'px';
+                
+                ripple.style.background = 'rgba(255, 107, 107, 0.2)';
+                ripple.style.position = 'absolute';
+                ripple.style.borderRadius = '50%';
+                ripple.style.transform = 'scale(0)';
+                ripple.style.animation = 'ripple 600ms linear';
+                
+                this.appendChild(ripple);
+                
+                setTimeout(() => {
+                    ripple.remove();
+                }, 600);
+            });
+        });
+        
+        // Add style for ripple effect
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Tab switching functionality
+        document.querySelectorAll('.module-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.module-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

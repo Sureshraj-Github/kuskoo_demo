@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block body_block %}
+{% load static %}
+<style>
+    .errorlist{
+        color: red;
+    }
+</style>
+<div class="content-wrapper">
+    <div class="col-12 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-header">
+                <h3>Maker Checker Mapping</h3>
+            </div>
+            <div class="card-body">
+                <form action="" method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form.maker.label_tag }}
+                                {{ form.maker }}
+                                {{ form.maker.errors }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form.checker.label_tag }}
+                                {{ form.checker }}
+                                {{ form.checker.errors }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

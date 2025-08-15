@@ -1,0 +1,154 @@
+{% extends 'sub_base.html' %}
+{% block body_block %}
+{% load static %}
+
+<div class="container-fluid px-4 py-4">
+  <!-- Header & Add Task Button -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h1 class="h2 mb-1" style="color: var(--primary-purple); font-weight: 700;">
+        campaign {% if view %}View{% elif edit %}Edit{% endif %}
+      </h1>
+      <p class="text-muted mb-0">Manage your campaign and stay productive</p>
+    </div>
+    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addcampaignModal">
+      <i class="fas fa-plus me-2"></i>Add campaign
+    </button>
+  </div>
+
+  <div class="container-fluid px-4 py-4">
+
+    <div id="campaignList" class="row g-3">
+      {% for data in records %}
+      <div class="col-md-4 mb-4">
+  <div class="card shadow-sm h-100 campaign-item border-0" data-id="{{ data.id }}">
+    
+    <!-- Card Header -->
+    <!-- Card Header -->
+
+    <div class="bg-dark text-white px-3 py-2 rounded-top position-relative">
+  <div class="d-flex align-items-center justify-content-between p-1">
+    <h6 class="mb-0 text-truncate small fw-semibold w-100 pe-4">
+      campaign #{{ data.id }}
+    </h6>
+
+    <!-- Dropdown -->
+    <div class="dropdown ms-2 position-absolute top-0 end-0 m-1">
+      <button class="btn btn-sm btn-light text-dark border-0" type="button" id="dropdownMenu{{ data.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa fa-ellipsis-v"></i>
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenu{{ data.id }}">
+        <li>
+          <button class="dropdown-item open-campaign-modal" data-id="{{ data.id }}" data-mode="view" data-bs-toggle="modal" data-bs-target="#campaignModal">
+            <i class="fa fa-eye me-2"></i> View
+          </button>
+        </li>
+        <li>
+          <button class="dropdown-item open-campaign-modal" data-id="{{ data.id }}" data-mode="edit" data-bs-toggle="modal" data-bs-target="#campaignModal">
+            <i class="fa fa-edit me-2"></i> Edit
+          </button>
+        </li>
+        <li>
+          <form method="post" action="{% url 'campaign_delete' data.id %}" onsubmit="return confirm('Delete this campaign ?')">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item text-danger">
+              <i class="fa fa-trash me-2"></i> Delete
+            </button>
+          </form>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+ <!-- Card Body -->
+    <div class="card-body small py-3 px-3">
+
+<p class='mb-1'><span class='text-muted'>name : </span>{{data.name}}</p>
+<p class='mb-1'><span class='text-muted'>objective : </span>{{data.objective}}</p>
+<p class='mb-1'><span class='text-muted'>budget : </span>{{data.budget}}</p>
+<p class='mb-1'><span class='text-muted'>start_date : </span>{{data.start_date}}</p>
+<p class='mb-1'><span class='text-muted'>end_date : </span>{{data.end_date}}</p>
+         
+      </div>
+      </div>
+</div>
+      {% endfor %}
+    </div>
+
+    {% if records|length == 0 %}
+    <div class="text-center py-5">
+      <i class="fas fa-tasks fa-3x text-muted mb-3"></i>
+      <h5 class="text-muted">No campaign found</h5>
+      <p class="text-muted">Try adjusting your search or filter criteria</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Add campaign Modal -->
+  <div class="modal fade" id="addcampaignModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Add New campaign
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form method="post" id="addcampaignForm">
+            {% csrf_token %}
+            {% for field in form %}
+            <div class="mb-3">
+              {{ field.label_tag }} {{ field }}
+              {% if field.help_text %}
+              <small class="form-text text-muted">{{ field.help_text }}</small>
+              {% endif %}
+              {% for err in field.errors %}
+              <div class="text-danger">{{ err }}</div>
+              {% endfor %}
+            </div>
+            {% endfor %}
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-plus me-2"></i>Add campaign</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- View/Edit Modal -->
+  <div class="modal fade" id="campaignModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="campaignModalTitle"></h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body" id="campaignModalBody">
+          <!-- Loaded by AJAX -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    document.querySelectorAll('.open-campaign-modal').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.mode;
+        const id = btn.dataset.id;
+        document.getElementById('campaignModalTitle').innerText =
+          mode === 'view' ? 'View campaign' : 'Edit campaign';
+        fetch(`{% url 'campaign_edit' '0' %}?mode=${mode}`.replace('0', id), {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+          .then(res => res.text())
+          .then(html => {
+            document.getElementById('campaignModalBody').innerHTML = html;
+          });
+      });
+    });
+  </script>
+  {% endblock %}

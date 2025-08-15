@@ -1,0 +1,2003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bharathbrands Management Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --accent: #f72585;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --info: #90e0ef;
+            --light: #f8f9fa;
+            --lighter: #e9ecef;
+            --dark: #212529;
+            --darker: #343a40;
+            --text: #495057;
+            --text-light: #6c757d;
+            
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.08);
+            --shadow: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.15);
+            --border-radius: 16px;
+            --border-radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 2rem;
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo {
+            width: 45px;
+            height: 45px;
+            background: var(--primary);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-weight: 700;
+            font-size: 1.6rem;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box input {
+            padding: 10px 15px 10px 40px;
+            border-radius: 50px;
+            border: 1px solid var(--lighter);
+            background: var(--light);
+            font-size: 0.95rem;
+            width: 280px;
+            transition: var(--transition);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            width: 320px;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-light);
+        }
+
+        .action-btn {
+            position: relative;
+            width: 42px;
+            height: 42px;
+            border: none;
+            background: var(--light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .action-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow);
+        }
+
+        .notification-badge {
+            position: absolute;
+            top: -3px;
+            right: -3px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.7rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: var(--light);
+            border-radius: 50px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-profile:hover {
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        /* Main Layout */
+        .dashboard-container {
+            display: flex;
+            min-height: calc(100vh - 85px);
+            padding: 2rem;
+            gap: 2rem;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 280px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem 1.2rem;
+            box-shadow: var(--shadow);
+            height: fit-content;
+            position: sticky;
+            top: 105px;
+        }
+
+        .sidebar-header {
+            padding: 0 0.5rem 1.2rem;
+            border-bottom: 1px solid var(--lighter);
+            margin-bottom: 1.5rem;
+        }
+
+        .sidebar-title {
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+            color: var(--dark);
+        }
+
+        .sidebar-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        .nav-section {
+            margin-bottom: 1.8rem;
+        }
+
+        .nav-title {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            padding: 0 0.5rem;
+            font-weight: 600;
+        }
+
+        .nav-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 1rem;
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--text);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(67, 97, 238, 0.08);
+            color: var(--primary);
+        }
+
+        .nav-item.active {
+            font-weight: 600;
+        }
+
+        .nav-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+        }
+
+        .nav-text {
+            flex: 1;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .nav-badge {
+            background: var(--primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.8rem 1.5rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border-left: 4px solid var(--primary);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.2rem;
+        }
+
+        .stat-icon {
+            width: 54px;
+            height: 54px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .stat-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #4caf50;
+        }
+
+        .stat-trend.down {
+            color: var(--accent);
+        }
+
+        .stat-title {
+            font-size: 0.95rem;
+            color: var(--text-light);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .stat-chart {
+            height: 40px;
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .chart-bar {
+            flex: 1;
+            background: var(--primary);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .chart-bar:hover {
+            opacity: 1;
+        }
+
+        /* Modules Section */
+        .section {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.8rem;
+        }
+
+        .section-title {
+            font-weight: 700;
+            font-size: 1.6rem;
+            color: var(--dark);
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .section-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--light);
+            color: var(--text);
+            border: 1px solid var(--lighter);
+        }
+
+        .btn-secondary:hover {
+            background: white;
+            box-shadow: var(--shadow);
+        }
+
+        /* Modules Grid */
+        .modules-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.8rem;
+        }
+
+        .module-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 1.8rem;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--lighter);
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .module-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary);
+        }
+
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--primary);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.5s ease;
+        }
+
+        .module-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .module-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .module-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            background: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+
+        .module-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .module-action {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .module-action:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .module-content h3 {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 0.8rem;
+            color: var(--dark);
+        }
+
+        .module-content p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 1.8rem;
+            line-height: 1.6;
+        }
+        
+        /* Credential Section */
+        .credentials {
+            background: var(--lighter);
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 1.5rem;
+        }
+        
+        .credential-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .credential-label {
+            font-weight: 500;
+            color: var(--text-light);
+        }
+        
+        .credential-value {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+        
+        .credential-value input {
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.9rem;
+            text-align: right;
+            width: 120px;
+            outline: none;
+        }
+        
+        .credential-value .toggle-password {
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .module-stats {
+            display: flex;
+            justify-content: space-between;
+            border-top: 1px solid var(--lighter);
+            padding-top: 1.2rem;
+        }
+
+        .stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-number {
+            font-weight: 700;
+            font-size: 1.4rem;
+            color: var(--dark);
+        }
+
+        .stat-label {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-30px);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .login-modal.active .login-container {
+            transform: translateY(0);
+        }
+
+        .login-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-close:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header .logo {
+            margin: 0 auto 1rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--lighter);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        /* Search Results */
+        .search-results-info {
+            background: rgba(67, 97, 238, 0.05);
+            border-left: 4px solid var(--primary);
+            padding: 12px 16px;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .search-results-info p {
+            font-size: 0.95rem;
+            color: var(--text);
+        }
+        
+        .search-results-info .clear-search {
+            background: var(--light);
+            border: none;
+            border-radius: 20px;
+            padding: 6px 12px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .search-results-info .clear-search:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .dashboard-container {
+                padding: 1.5rem;
+            }
+            
+            .sidebar {
+                width: 240px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            
+            .sidebar {
+                width: 100%;
+                position: static;
+            }
+            
+            .search-box input {
+                width: 220px;
+            }
+            
+            .search-box input:focus {
+                width: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-wrap: wrap;
+                gap: 1rem;
+                padding: 1rem;
+            }
+            
+            .brand {
+                order: 1;
+            }
+            
+            .search-box {
+                order: 3;
+                width: 100%;
+                margin-top: 1rem;
+            }
+            
+            .search-box input {
+                width: 100%;
+            }
+            
+            .search-box input:focus {
+                width: 100%;
+            }
+            
+            .header-actions {
+                order: 2;
+                margin-left: auto;
+            }
+            
+            .section {
+                padding: 1.5rem;
+            }
+            
+            .modules-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .user-info {
+                display: none;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .section-actions {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .module-header {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .module-actions {
+                align-self: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <!-- <div class="login-modal active" id="loginModal">
+        <div class="login-container">
+            <div class="login-close" id="closeLogin">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <h2>Welcome to Bharathbrands</h2>
+                <p>Sign in to your management dashboard</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+            <div class="login-footer">
+                <p>Default credentials: admin@gmail.com / 1234</p>
+            </div>
+        </div>
+    </div> -->
+
+    <!-- Header -->
+    <header class="header">
+        <div class="brand">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+            </div>
+            <div class="brand-text">
+                <div class="brand-name">Bharathbrands</div>
+                <div class="brand-subtitle">Management Dashboard</div>
+            </div>
+        </div>
+        
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search modules, features...">
+        </div>
+        
+        <div class="header-actions">
+            <button class="action-btn" title="Notifications">
+                <i class="fas fa-bell"></i>
+                <span class="notification-badge">3</span>
+            </button>
+            <button class="action-btn" title="Settings">
+                <i class="fas fa-cog"></i>
+            </button>
+            
+            <div class="user-profile">
+                <div class="profile-img">JD</div>
+                <div class="user-info">
+                    <div class="user-name">John Doe</div>
+                    <div class="user-role">Administrator</div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Main Dashboard -->
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-title">Management Modules</div>
+                <div class="sidebar-subtitle">Organized by workflow</div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Core Modules</div>
+                <div class="nav-items">
+                    <a href="{% url 'main_dashboard' %}" class="nav-item active">
+                        <div class="nav-icon">
+                            <i class="fas fa-cube"></i>
+                        </div>
+                        <span class="nav-text">Dashboard</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <span class="nav-text">Cross-Module</span>
+                        <span class="nav-badge">8</span>
+                    </a>
+                    <a href="#" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <span class="nav-text">Governance</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">Business Modules</div>
+                <div class="nav-items">
+                    <a href="https://lmsv3fe.pythonanywhere.com/" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <span class="nav-text">CRM</span>
+                        <span class="nav-badge">12</span>
+                    </a>
+                    <a href="https://fehr.pythonanywhere.com/" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <span class="nav-text">HR & Payroll</span>
+                    </a>
+                    <a href="https://scmlms.pythonanywhere.com/" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-shopping-cart"></i>
+                        </div>
+                        <span class="nav-text">Procurement</span>
+                    </a>
+                    <a href="https://bbmoiassetmanagement.pythonanywhere.com/" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-warehouse"></i>
+                        </div>
+                        <span class="nav-text">Assets</span>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="nav-section">
+                <div class="nav-title">System Modules</div>
+                <div class="nav-items">
+                    <a href="https://bbcentralizedfinance.pythonanywhere.com/" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <span class="nav-text">Finance</span>
+                    </a>
+                    <a href="https://www.zecosdk.co.in/" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-file-contract"></i>
+                        </div>
+                        <span class="nav-text">Documents</span>
+                        <span class="nav-badge">5</span>
+                    </a>
+                    <a href="{% url 'compliance_dashboard' %}" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-balance-scale"></i>
+                        </div>
+                        <span class="nav-text">Compliance</span>
+                    </a>
+                    <a href="{% url 'campaign_dashboard' %}" class="nav-item">
+                        <div class="nav-icon">
+                            <i class="fas fa-bullhorn"></i>
+                        </div>
+                        <span class="nav-text">Advocacy</span>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Stats Overview -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            12.5%
+                        </div>
+                    </div>
+                    <div class="stat-title">Active Users</div>
+                    <div class="stat-value">1,458</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 30%"></div>
+                        <div class="chart-bar" style="height: 60%"></div>
+                        <div class="chart-bar" style="height: 45%"></div>
+                        <div class="chart-bar" style="height: 80%"></div>
+                        <div class="chart-bar" style="height: 65%"></div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <div class="stat-trend down">
+                            <i class="fas fa-arrow-down"></i>
+                            3.2%
+                        </div>
+                    </div>
+                    <div class="stat-title">Pending Tasks</div>
+                    <div class="stat-value">42</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 70%"></div>
+                        <div class="chart-bar" style="height: 50%"></div>
+                        <div class="chart-bar" style="height: 65%"></div>
+                        <div class="chart-bar" style="height: 40%"></div>
+                        <div class="chart-bar" style="height: 30%"></div>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-trend">
+                            <i class="fas fa-arrow-up"></i>
+                            18.7%
+                        </div>
+                    </div>
+                    <div class="stat-title">Revenue Growth</div>
+                    <div class="stat-value">$124.5K</div>
+                    <div class="stat-chart">
+                        <div class="chart-bar" style="height: 40%"></div>
+                        <div class="chart-bar" style="height: 55%"></div>
+                        <div class="chart-bar" style="height: 65%"></div>
+                        <div class="chart-bar" style="height: 75%"></div>
+                        <div class="chart-bar" style="height: 90%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Business Modules Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">Business Modules</h2>
+                    <div class="section-actions">
+                        <button class="btn btn-secondary">
+                            <i class="fas fa-filter"></i> Filter
+                        </button>
+                        <button class="btn btn-primary">
+                            <i class="fas fa-plus"></i> Add Module
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="searchResultsInfo" class="search-results-info" style="display: none;">
+                    <p>Showing <span id="resultCount">0</span> results for "<span id="searchQuery"></span>"</p>
+                    <button class="clear-search" id="clearSearch">Clear Search</button>
+                </div>
+                
+                <div class="modules-grid" id="businessModules">
+                    <!-- CRM Module -->
+                   <!-- Compliance & Regulatory Reporting -->
+<a href="{% url 'compliance_dashboard' %}" class="module-card" data-module="Compliance & Regulatory Reporting">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-gavel"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Compliance & Regulatory Reporting</h3>
+        <p>Ensure adherence to industry regulations and generate comprehensive reports for compliance tracking.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="compliance_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="password123" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">500</div>
+                <div class="stat-label">Reports</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">45</div>
+                <div class="stat-label">Active Cases</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Advocacy & Campaign Mgmt -->
+<a href="{% url 'campaign_dashboard' %}" class="module-card" data-module="Advocacy & Campaign Mgmt">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-bullhorn"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Advocacy & Campaign Mgmt</h3>
+        <p>Manage and track campaigns, advocate for key issues, and engage with stakeholders.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="advocacy_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="campaign123" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">120</div>
+                <div class="stat-label">Campaigns</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">75</div>
+                <div class="stat-label">Active Advocates</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Publishing, Media & Advertising -->
+<a href="{% url 'advertising_dashboard' %}" class="module-card" data-module="Publishing, Media & Advertising">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-newspaper"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Publishing, Media & Advertising</h3>
+        <p>Manage content creation, media strategies, and advertising campaigns across multiple platforms.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="media_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="publish2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">500</div>
+                <div class="stat-label">Articles</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">30</div>
+                <div class="stat-label">Active Ads</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Audit Oversight -->
+<a href="#" class="module-card" data-module="Audit Oversight">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Audit Oversight</h3>
+        <p>Monitor and evaluate audits to ensure compliance and effectiveness in financial oversight.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="audit_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="audit2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">72</div>
+                <div class="stat-label">Audits</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">14</div>
+                <div class="stat-label">Active Reviews</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Customer Support & Service Desk -->
+<a href="https://supportticketfe.pythonanywhere.com/" class="module-card" data-module="Customer Support & Service Desk">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-headset"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Customer Support & Service Desk</h3>
+        <p>Support customers with their queries and issues, ensuring timely resolutions and satisfaction.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="support_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="1234" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">1,250</div>
+                <div class="stat-label">Tickets</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">310</div>
+                <div class="stat-label">Active Cases</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- API Gateway & Integrations -->
+<a href="https://www.iamkarthik.com/" class="module-card" data-module="API Gateway & Integrations">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-plug"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>API Gateway & Integrations</h3>
+        <p>Manage and monitor API connections, ensuring smooth integrations between various systems.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="BBAdmin" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="admin1234" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">350</div>
+                <div class="stat-label">API Endpoints</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">120</div>
+                <div class="stat-label">Active Integrations</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Governance & Board Evaluation -->
+<a href="{% url 'board_evaluation_dashboard' %}" class="module-card" data-module="Governance & Board Evaluation">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-users-cog"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Governance & Board Evaluation</h3>
+        <p>Oversee governance practices and evaluate board performance for effective organizational management.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="governance_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="govern2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Evaluations</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Active Boards</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Delegate Nomination & E-Voting -->
+<a href="{% url 'delegate_dashboard' %}" class="module-card" data-module="Delegate Nomination & E-Voting">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-vote-yea"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Delegate Nomination & E-Voting</h3>
+        <p>Manage delegate nominations and conduct secure electronic voting for organizational decisions.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="voting_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="vote2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">800</div>
+                <div class="stat-label">Nominations</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">600</div>
+                <div class="stat-label">Votes Cast</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+                    
+                    <!-- HR Module -->
+                    <a href="https://fehr.pythonanywhere.com/" class="module-card" data-module="HR & Payroll">
+                        <div class="module-header">
+                            <div class="module-icon">
+                                <i class="fas fa-user-tie"></i>
+                            </div>
+                            <div class="module-actions">
+                                <div class="module-action">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="module-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <h3>HR & Payroll</h3>
+                            <p>Comprehensive employee management, payroll processing, benefits administration, and performance tracking.</p>
+                            
+                            <div class="credentials">
+                                <div class="credential-item">
+                                    <span class="credential-label">Username:</span>
+                                    <div class="credential-value">
+                                        <input type="text" value="admin@gmail.com" readonly>
+                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                                    </div>
+                                </div>
+                                <div class="credential-item">
+                                    <span class="credential-label">Password:</span>
+                                    <div class="credential-value">
+                                        <input type="password" value="1234" class="password-input" readonly>
+                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
+                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module-stats">
+                                <div class="stat">
+                                    <div class="stat-number">156</div>
+                                    <div class="stat-label">Employees</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">12</div>
+                                    <div class="stat-label">Departments</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- Procurement Module -->
+                    <a href="https://scmlms.pythonanywhere.com/" class="module-card" data-module="Procurement">
+                        <div class="module-header">
+                            <div class="module-icon">
+                                <i class="fas fa-shopping-cart"></i>
+                            </div>
+                            <div class="module-actions">
+                                <div class="module-action">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="module-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <h3>Procurement</h3>
+                            <p>Streamlined purchasing process, vendor management, and inventory control for efficient operations.</p>
+                            
+                            <div class="credentials">
+                                <div class="credential-item">
+                                    <span class="credential-label">Username:</span>
+                                    <div class="credential-value">
+                                        <input type="text" value="admin@gmail.com" readonly>
+                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                                    </div>
+                                </div>
+                                <div class="credential-item">
+                                    <span class="credential-label">Password:</span>
+                                    <div class="credential-value">
+                                        <input type="password" value="1234" class="password-input" readonly>
+                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
+                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module-stats">
+                                <div class="stat">
+                                    <div class="stat-number">42</div>
+                                    <div class="stat-label">Vendors</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">$89.2K</div>
+                                    <div class="stat-label">Spend</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- Asset Management Module -->
+                    <a href="https://bbmoiassetmanagement.pythonanywhere.com/" class="module-card" data-module="Asset Management">
+                        <div class="module-header">
+                            <div class="module-icon">
+                                <i class="fas fa-warehouse"></i>
+                            </div>
+                            <div class="module-actions">
+                                <div class="module-action">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="module-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <h3>Asset Management</h3>
+                            <p>Track, maintain, and optimize physical and digital assets throughout their lifecycle.</p>
+                            
+                            <div class="credentials">
+                                <div class="credential-item">
+                                    <span class="credential-label">Username:</span>
+                                    <div class="credential-value">
+                                        <input type="text" value="admin@gmail.com" readonly>
+                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                                    </div>
+                                </div>
+                                <div class="credential-item">
+                                    <span class="credential-label">Password:</span>
+                                    <div class="credential-value">
+                                        <input type="password" value="1234" class="password-input" readonly>
+                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
+                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module-stats">
+                                <div class="stat">
+                                    <div class="stat-number">542</div>
+                                    <div class="stat-label">Assets</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">96%</div>
+                                    <div class="stat-label">Active</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            <!-- System Modules Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2 class="section-title">System Modules</h2>
+                </div>
+                
+                <div class="modules-grid" id="systemModules">
+                    <!-- Finance Module -->
+                    <a href="https://bbcentralizedfinance.pythonanywhere.com/" class="module-card" data-module="Financial Reporting">
+                        <div class="module-header">
+                            <div class="module-icon">
+                                <i class="fas fa-calculator"></i>
+                            </div>
+                            <div class="module-actions">
+                                <div class="module-action">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="module-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <h3>Financial Reporting</h3>
+                            <p>Comprehensive accounting, budgeting, and financial reporting for informed decision-making.</p>
+                            
+                            <div class="credentials">
+                                <div class="credential-item">
+                                    <span class="credential-label">Username:</span>
+                                    <div class="credential-value">
+                                        <input type="text" value="admin.partha@gmail.com" readonly>
+                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                                    </div>
+                                </div>
+                                <div class="credential-item">
+                                    <span class="credential-label">Password:</span>
+                                    <div class="credential-value">
+                                        <input type="password" value="1234" class="password-input" readonly>
+                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
+                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="module-stats">
+                                <div class="stat">
+                                    <div class="stat-number">$124.5K</div>
+                                    <div class="stat-label">Revenue</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">$35.3K</div>
+                                    <div class="stat-label">Profit</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    
+                    <!-- Document Management Module -->
+                    <a href="https://www.zecosdk.co.in/" class="module-card" data-module="Document Management">
+                        <div class="module-header">
+                            <div class="module-icon">
+                                <i class="fas fa-file-contract"></i>
+                            </div>
+                            <div class="module-actions">
+                                <div class="module-action">
+                                    <i class="fas fa-cog"></i>
+                                </div>
+                                <div class="module-action">
+                                    <i class="fas fa-ellipsis-h"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="module-content">
+                            <h3>Document Management</h3>
+                            <p>Secure storage, version control, and collaboration for all organizational documents.</p>
+                            <p></p>
+                            <div class="credentials">
+                                <div class="credential-item">
+                                    <span class="credential-label">Username:</span>
+                                    <div class="credential-value">
+                                        <input type="text" value="muralidas@bharathbrands.in" readonly>
+                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                                    </div>
+                                </div>
+                                <div class="credential-item">
+                                    <span class="credential-label">Password:</span>
+                                    <div class="credential-value">
+                                        <input type="password" value="1234" class="password-input" readonly>
+                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
+                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                                    </div>
+
+                                </div>
+                                 <span class="credential-label">Company Code:</span>
+                                                                    <input type="Company Code" value="KES-3581" class="form-control" readonly>
+
+                            </div>
+                            
+                            <div class="module-stats">
+                                <div class="stat">
+                                    <div class="stat-number">12.3K</div>
+                                    <div class="stat-label">Documents</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">98%</div>
+                                    <div class="stat-label">Compliant</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Login functionality
+        // const loginModal = document.getElementById('loginModal');
+        const loginForm = document.getElementById('loginForm');
+        const closeLogin = document.getElementById('closeLogin');
+        
+        // Check if user is already logged in (for demo purposes)
+        const isLoggedIn = localStorage.getItem('esaakiLoggedIn');
+        
+        // if(isLoggedIn) {
+        //     loginModal.classList.remove('active');
+        // } else {
+        //     // Show login modal by default
+        //     loginModal.classList.add('active');
+        // }
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Default credentials
+            if(email === 'admin@gmail.com' && password === '1234') {
+                localStorage.setItem('esaakiLoggedIn', 'true');
+                loginModal.classList.remove('active');
+            } else {
+                alert('Invalid credentials. Use admin@gmail.com / 1234');
+            }
+        });
+        
+        // Close login modal
+        closeLogin.addEventListener('click', function() {
+            loginModal.classList.remove('active');
+        });
+        
+        // Animate module cards on hover
+        const moduleCards = document.querySelectorAll('.module-card');
+        moduleCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px)';
+                card.style.boxShadow = '0 15px 25px rgba(0, 0, 0, 0.15)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            });
+        });
+        
+        // Animate stats bars on page load
+        const chartBars = document.querySelectorAll('.chart-bar');
+        chartBars.forEach(bar => {
+            const originalHeight = bar.style.height;
+            bar.style.height = '0';
+            
+            setTimeout(() => {
+                bar.style.transition = 'height 1s ease';
+                bar.style.height = originalHeight;
+            }, 300);
+        });
+        
+        // Password visibility toggle
+        document.querySelectorAll('.toggle-password').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const passwordInput = this.parentElement.querySelector('.password-input');
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    this.classList.remove('fa-eye');
+                    this.classList.add('fa-eye-slash');
+                } else {
+                    passwordInput.type = 'password';
+                    this.classList.remove('fa-eye-slash');
+                    this.classList.add('fa-eye');
+                }
+            });
+        });
+        
+        // Copy to clipboard functionality
+        document.querySelectorAll('.copy-icon').forEach(icon => {
+            icon.addEventListener('click', function() {
+                const input = this.parentElement.querySelector('input');
+                input.select();
+                document.execCommand('copy');
+                
+                // Show feedback
+                const originalIcon = this.classList.contains('fa-copy') ? 'fa-copy' : 'fa-eye';
+                this.classList.remove(originalIcon);
+                this.classList.add('fa-check');
+                
+                setTimeout(() => {
+                    this.classList.remove('fa-check');
+                    this.classList.add(originalIcon);
+                }, 1500);
+            });
+        });
+        
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchResultsInfo = document.getElementById('searchResultsInfo');
+        const resultCount = document.getElementById('resultCount');
+        const searchQuery = document.getElementById('searchQuery');
+        const clearSearch = document.getElementById('clearSearch');
+        
+        // Get all module cards
+        const businessModuleCards = document.querySelectorAll('#businessModules .module-card');
+        const systemModuleCards = document.querySelectorAll('#systemModules .module-card');
+        const allModuleCards = [...businessModuleCards, ...systemModuleCards];
+        
+        searchInput.addEventListener('input', function() {
+            const query = this.value.toLowerCase().trim();
+            
+            if (query === '') {
+                searchResultsInfo.style.display = 'none';
+                allModuleCards.forEach(card => {
+                    card.style.display = 'block';
+                });
+                return;
+            }
+            
+            let matchCount = 0;
+            
+            allModuleCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+                const moduleName = card.getAttribute('data-module').toLowerCase();
+                
+                if (title.includes(query) || description.includes(query) || moduleName.includes(query)) {
+                    card.style.display = 'block';
+                    matchCount++;
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Update search results info
+            resultCount.textContent = matchCount;
+            searchQuery.textContent = query;
+            searchResultsInfo.style.display = 'flex';
+        });
+        
+        // Clear search
+        clearSearch.addEventListener('click', function() {
+            searchInput.value = '';
+            searchResultsInfo.style.display = 'none';
+            allModuleCards.forEach(card => {
+                card.style.display = 'block';
+            });
+        });
+    </script>
+</body>
+</html>

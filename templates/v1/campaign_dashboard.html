@@ -1,0 +1,588 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Advocacy Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf9 100%);
+            color: #334155;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px 0;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+        }
+        
+        .logo-text h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+        }
+        
+        .logo-text p {
+            font-size: 14px;
+            color: #64748b;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background: white;
+            padding: 8px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .user-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 18px;
+        }
+        
+        .dashboard-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .dashboard-title h2 {
+            font-size: 42px;
+            font-weight: 800;
+            margin-bottom: 15px;
+            color: #1e293b;
+            position: relative;
+            display: inline-block;
+            letter-spacing: -1px;
+        }
+        
+        .dashboard-title h2::after {
+            content: "";
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 5px;
+            background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+            border-radius: 3px;
+        }
+        
+        .dashboard-title p {
+            font-size: 18px;
+            color: #64748b;
+            max-width: 700px;
+            margin: 30px auto 0;
+            line-height: 1.6;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            border: 1px solid rgba(241, 245, 249, 0.8);
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 45px rgba(59, 130, 246, 0.15);
+        }
+        
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            border-radius: 24px 24px 0 0;
+        }
+        
+        .card-1::before { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+        .card-2::before { background: linear-gradient(90deg, #10b981, #047857); }
+        .card-3::before { background: linear-gradient(90deg, #8b5cf6, #6d28d9); }
+        .card-4::before { background: linear-gradient(90deg, #ef4444, #b91c1c); }
+        .card-5::before { background: linear-gradient(90deg, #f59e0b, #d97706); }
+        .card-6::before { background: linear-gradient(90deg, #06b6d4, #0e7490); }
+        
+        .card-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 25px;
+            font-size: 32px;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-1 .card-icon { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+        .card-2 .card-icon { background: linear-gradient(135deg, #10b981, #047857); }
+        .card-3 .card-icon { background: linear-gradient(135deg, #8b5cf6, #6d28d9); }
+        .card-4 .card-icon { background: linear-gradient(135deg, #ef4444, #b91c1c); }
+        .card-5 .card-icon { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .card-6 .card-icon { background: linear-gradient(135deg, #06b6d4, #0e7490); }
+        
+        .card:hover .card-icon {
+            transform: scale(1.1);
+        }
+        
+        .card-content h3 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 18px;
+            color: #1e293b;
+        }
+        
+        .card-content p {
+            font-size: 16px;
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 25px;
+        }
+        
+        .card-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #f1f5f9;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #94a3b8;
+            font-weight: 500;
+        }
+        
+        .card-hover-effect {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1;
+            transition: all 0.5s ease;
+            opacity: 0;
+        }
+        
+        .card:hover .card-hover-effect {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 30px 0;
+            color: #94a3b8;
+            font-size: 14px;
+            border-top: 1px solid #e2e8f0;
+        }
+        
+        .stat-badge {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            margin-top: 15px;
+        }
+        
+        .card-1 .stat-badge { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .card-2 .stat-badge { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .card-3 .stat-badge { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+        .card-4 .stat-badge { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .card-5 .stat-badge { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .card-6 .stat-badge { background: rgba(6, 182, 212, 0.1); color: #06b6d4; }
+        
+        @media (max-width: 768px) {
+            header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .user-info {
+                margin: 0 auto;
+            }
+            
+            .dashboard-title h2 {
+                font-size: 32px;
+            }
+            
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation effects */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        
+        .card {
+            animation: float 8s ease-in-out infinite;
+        }
+        
+        .card:nth-child(2) { animation-delay: 0.8s; }
+        .card:nth-child(3) { animation-delay: 1.6s; }
+        .card:nth-child(4) { animation-delay: 2.4s; }
+        .card:nth-child(5) { animation-delay: 3.2s; }
+        .card:nth-child(6) { animation-delay: 4s; }
+        
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .header-button {
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 500;
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #3b82f6;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+        }
+        
+        .header-button:hover {
+            background: #3b82f6;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .header-button i {
+            margin-right: 8px;
+        }
+        
+        .module-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .module-tab {
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: white;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+        
+        .module-tab.active {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .module-tab:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-section {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            margin-bottom: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(241, 245, 249, 0.8);
+        }
+        
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .summary-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+        
+        .summary-card .stat-value {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #1e293b;
+        }
+        
+        .summary-card .stat-label {
+            font-size: 16px;
+            color: #64748b;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            margin-top: 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            border-radius: 5px;
+        }
+        
+        .progress-1 { width: 75%; background: #3b82f6; }
+        .progress-2 { width: 90%; background: #10b981; }
+        .progress-3 { width: 65%; background: #8b5cf6; }
+        .progress-4 { width: 85%; background: #f59e0b; }
+    </style>
+</head>
+<body>
+  <div class="dashboard-container">
+    <a href="{% url 'main_dashboard' %}" style="text-decoration: none;">
+    <header> 
+      <div class="logo">
+        <div class="logo-icon">
+          <i class="fas fa-bullhorn"></i>
+        </div>
+        <div class="logo-text">
+          <h1>AdvocaSphere</h1>
+          <p>Advocacy & Campaign Management</p>
+        </div>
+      </div>
+      <div class="user-info">
+        <div class="user-avatar">AM</div>
+        <div>
+          <div style="font-weight: 600;">Alex Morgan</div>
+          <div style="font-size: 14px; color: #64748b;">Campaign Officer</div>
+        </div>
+      </div>
+    </header>
+    </a>
+
+    <div class="dashboard-title">
+      <h2>Advocacy Dashboard</h2>
+      <p>Manage campaigns, stakeholders, petitions, media activity, and performance metrics.</p>
+
+      <div class="header-buttons">
+        <div class="header-button"><i class="fas fa-plus"></i> New Campaign</div>
+        <div class="header-button"><i class="fas fa-filter"></i> Filter</div>
+        <div class="header-button"><i class="fas fa-cog"></i> Settings</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <!-- Campaigns -->
+      <div class="card card-1" onclick="location.href='{% url 'campaign' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="card-content">
+          <h3>Campaigns</h3>
+          <p>Create, track, and analyze advocacy campaigns targeting key issues.</p>
+          <div class="stat-badge">3 active</div>
+        </div>
+      </div>
+
+      <!-- Campaign Channels -->
+      <div class="card card-2" onclick="location.href='{% url 'campaignchannel' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-share-alt"></i></div>
+        <div class="card-content">
+          <h3>Campaign Channels</h3>
+          <p>Manage digital and offline communication channels used in advocacy efforts.</p>
+          <div class="stat-badge">6 channels</div>
+        </div>
+      </div>
+
+      <!-- Events -->
+      <div class="card card-3" onclick="location.href='{% url 'event' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-calendar-day"></i></div>
+        <div class="card-content">
+          <h3>Events</h3>
+          <p>Organize advocacy events, protests, and community meetups.</p>
+          <div class="stat-badge">Next: Sept 12</div>
+        </div>
+      </div>
+
+      <!-- Impact Metrics -->
+      <div class="card card-4" onclick="location.href='{% url 'impactmetric' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="card-content">
+          <h3>Impact Metrics</h3>
+          <p>Measure outcomes, audience reach, and engagement across initiatives.</p>
+          <div class="stat-badge">Updated hourly</div>
+        </div>
+      </div>
+
+      <!-- Media Monitor -->
+      <div class="card card-5" onclick="location.href='{% url 'mediamonitor' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-tv"></i></div>
+        <div class="card-content">
+          <h3>Media Monitoring</h3>
+          <p>Track media mentions and public sentiment for advocacy efforts.</p>
+          <div class="stat-badge">15 new articles</div>
+        </div>
+      </div>
+
+      <!-- Petitions -->
+      <div class="card card-6" onclick="location.href='{% url 'petition' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-file-signature"></i></div>
+        <div class="card-content">
+          <h3>Petitions</h3>
+          <p>Launch and manage petitions. Collect digital signatures and feedback.</p>
+          <div class="stat-badge">2 open</div>
+        </div>
+      </div>
+
+      <!-- Stakeholders -->
+      <div class="card card-7" onclick="location.href='{% url 'stakeholder' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-users"></i></div>
+        <div class="card-content">
+          <h3>Stakeholders</h3>
+          <p>Engage key stakeholders and advocacy partners across sectors.</p>
+          <div class="stat-badge">87 contacts</div>
+        </div>
+      </div>
+
+      <!-- Issue Briefs -->
+      <div class="card card-8" onclick="location.href='{% url 'issuebrief' %}'">
+        <div class="card-hover-effect"></div>
+        <div class="card-icon"><i class="fas fa-book-open"></i></div>
+        <div class="card-content">
+          <h3>Issue Briefs</h3>
+          <p>Create and distribute briefs on key advocacy issues and policy demands.</p>
+          <div class="stat-badge">4 new briefs</div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2025 AdvocaSphere | Empowering Change</p>
+    </footer>
+  </div>
+
+  <!-- Ripple Effect -->
+  <script>
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', function(e) {
+        let ripple = document.createElement('span');
+        ripple.className = 'ripple';
+        const rect = this.getBoundingClientRect();
+        const size = Math.max(rect.width, rect.height);
+        ripple.style.width = ripple.style.height = size + 'px';
+        ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+        ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+        ripple.style.background = 'rgba(79, 70, 229, 0.2)';
+        ripple.style.position = 'absolute';
+        ripple.style.borderRadius = '50%';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'ripple 600ms linear';
+        this.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes ripple {
+        to {
+          transform: scale(4);
+          opacity: 0;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
