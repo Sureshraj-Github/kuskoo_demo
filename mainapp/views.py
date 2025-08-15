@@ -72,7 +72,7 @@ def login(request):
             if login_response.status_code == 200:
                 login_tokes = login_response.json()
                 request.session['user_token']=login_tokes['access']
-                return redirect('/base_dashboard')
+                return redirect('/main_dashboard')
             else:
                 login_tokes = login_response.json()
                 login_error='Invalid Username and Password'
