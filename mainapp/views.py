@@ -48,7 +48,7 @@ def custom_login_required(view_func):
     return _wrapped_view
 
 # BASEURL = 'http://127.0.0.1:9000/'
-BASEURL = 'https://kusccobe.pythonanywhere.com/'
+BASEURL = 'https://kuscoobe.pythonanywhere.com/'
 
 def base_dashboard(request):
     return render(request, 'base_dashboard.html')
