@@ -45,42 +45,6 @@
             padding: 0;
         }
 
-        /* Toast Notification */
-        .toast {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--dark);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            z-index: 2000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s ease;
-        }
-        
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .toast i {
-            font-size: 1.2rem;
-        }
-        
-        .toast.success i {
-            color: #4ade80;
-        }
-        
-        .toast.error i {
-            color: #f87171;
-        }
-
         /* Header Styles */
         .header {
             display: flex;
@@ -665,16 +629,9 @@
             outline: none;
         }
         
-        .credential-value .toggle-password, 
-        .credential-value .copy-icon {
+        .credential-value .toggle-password {
             cursor: pointer;
             color: var(--text-light);
-            transition: color 0.2s ease;
-        }
-        
-        .credential-value .toggle-password:hover, 
-        .credential-value .copy-icon:hover {
-            color: var(--primary);
         }
 
         .module-stats {
@@ -701,6 +658,143 @@
             color: var(--text-light);
         }
 
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .login-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .login-container {
+            background: white;
+            border-radius: var(--border-radius-lg);
+            padding: 2.5rem;
+            width: 100%;
+            max-width: 450px;
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-30px);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .login-modal.active .login-container {
+            transform: translateY(0);
+        }
+
+        .login-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .login-close:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .login-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .login-header .logo {
+            margin: 0 auto 1rem;
+        }
+
+        .login-header h2 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .login-header p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid var(--lighter);
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            font-size: 1.05rem;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 1rem;
+        }
+
+        .login-btn:hover {
+            background: var(--secondary);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .login-footer a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
         /* Search Results */
         .search-results-info {
             background: rgba(67, 97, 238, 0.05);
@@ -834,11 +928,35 @@
     </style>
 </head>
 <body>
-    <!-- Toast Notification -->
-    <div class="toast" id="toast">
-        <i class="fas fa-check-circle"></i>
-        <span id="toastMessage">Copied to clipboard!</span>
-    </div>
+    <!-- Login Modal -->
+    <!-- <div class="login-modal active" id="loginModal">
+        <div class="login-container">
+            <div class="login-close" id="closeLogin">
+                <i class="fas fa-times"></i>
+            </div>
+            <div class="login-header">
+                <div class="logo">
+                    <i class="fas fa-cube"></i>
+                </div>
+                <h2>Welcome to Bharathbrands</h2>
+                <p>Sign in to your management dashboard</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+            <div class="login-footer">
+                <p>Default credentials: admin@gmail.com / 1234</p>
+            </div>
+        </div>
+    </div> -->
 
     <!-- Header -->
     <header class="header">
@@ -938,30 +1056,6 @@
                         </div>
                         <span class="nav-text">Assets</span>
                     </a>
-                    <a href="{% url 'compliance_dashboard' %}" target="_blank" class="nav-item">
-                        <div class="nav-icon">
-                            <i class="fas fa-gavel"></i>
-                        </div>
-                        <span class="nav-text">Compliance</span>
-                    </a>
-                    <a href="{% url 'campaign_dashboard' %}" target="_blank" class="nav-item">
-                        <div class="nav-icon">
-                            <i class="fas fa-bullhorn"></i>
-                        </div>
-                        <span class="nav-text">Advocacy</span>
-                    </a>
-                    <a href="{% url 'advertising_dashboard' %}" target="_blank" class="nav-item">
-                        <div class="nav-icon">
-                            <i class="fas fa-newspaper"></i>
-                        </div>
-                        <span class="nav-text">Publishing & Media</span>
-                    </a>
-                    <a href="https://supportticketfe.pythonanywhere.com/" target="_blank" class="nav-item">
-                        <div class="nav-icon">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                        <span class="nav-text">Support Desk</span>
-                    </a>
                 </div>
             </div>
             
@@ -981,23 +1075,17 @@
                         <span class="nav-text">Documents</span>
                         <span class="nav-badge">5</span>
                     </a>
-                    <a href="https://www.iamkarthik.com/" target="_blank" class="nav-item">
+                    <a href="{% url 'compliance_dashboard' %}" target="_blank" class="nav-item">
                         <div class="nav-icon">
-                            <i class="fas fa-plug"></i>
+                            <i class="fas fa-balance-scale"></i>
                         </div>
-                        <span class="nav-text">API Gateway</span>
+                        <span class="nav-text">Compliance</span>
                     </a>
-                    <a href="{% url 'board_evaluation_dashboard' %}" target="_blank" class="nav-item">
+                    <a href="{% url 'campaign_dashboard' %}" target="_blank" class="nav-item">
                         <div class="nav-icon">
-                            <i class="fas fa-users-cog"></i>
+                            <i class="fas fa-bullhorn"></i>
                         </div>
-                        <span class="nav-text">Governance</span>
-                    </a>
-                    <a href="{% url 'delegate_dashboard' %}" target="_blank" class="nav-item">
-                        <div class="nav-icon">
-                            <i class="fas fa-vote-yea"></i>
-                        </div>
-                        <span class="nav-text">Delegate Nomination</span>
+                        <span class="nav-text">Advocacy</span>
                     </a>
                 </div>
             </div>
@@ -1091,355 +1179,407 @@
                 </div>
                 
                 <div class="modules-grid" id="businessModules">
-                    <!-- Compliance & Regulatory Reporting -->
-                    <a href="{% url 'compliance_dashboard' %}" target="_blank" class="module-card" data-module="Compliance & Regulatory Reporting">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-gavel"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>Compliance & Regulatory Reporting</h3>
-                            <p>Ensure adherence to industry regulations and generate comprehensive reports for compliance tracking.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="compliance_admin@gmail.com" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="password123" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">500</div>
-                                    <div class="stat-label">Reports</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">45</div>
-                                    <div class="stat-label">Active Cases</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <!-- Advocacy & Campaign Mgmt -->
-                    <a href="{% url 'campaign_dashboard' %}" target="_blank" class="module-card" data-module="Advocacy & Campaign Mgmt">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-bullhorn"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>Advocacy & Campaign Mgmt</h3>
-                            <p>Manage and track campaigns, advocate for key issues, and engage with stakeholders.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="advocacy_admin@gmail.com" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="campaign123" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">120</div>
-                                    <div class="stat-label">Campaigns</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">75</div>
-                                    <div class="stat-label">Active Advocates</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <!-- Publishing, Media & Advertising -->
-                    <a href="{% url 'advertising_dashboard' %}" target="_blank" class="module-card" data-module="Publishing, Media & Advertising">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-newspaper"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>Publishing, Media & Advertising</h3>
-                            <p>Manage content creation, media strategies, and advertising campaigns across multiple platforms.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="media_admin@gmail.com" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="publish2023" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">500</div>
-                                    <div class="stat-label">Articles</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">30</div>
-                                    <div class="stat-label">Active Ads</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <!-- Customer Support & Service Desk -->
-                    <a href="https://supportticketfe.pythonanywhere.com/" target="_blank" class="module-card" data-module="Customer Support & Service Desk">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-headset"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>Customer Support & Service Desk</h3>
-                            <p>Support customers with their queries and issues, ensuring timely resolutions and satisfaction.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="support_admin@gmail.com" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="1234" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">1,250</div>
-                                    <div class="stat-label">Tickets</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">310</div>
-                                    <div class="stat-label">Active Cases</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <!-- API Gateway & Integrations -->
-                    <a href="https://www.iamkarthik.com/" target="_blank" class="module-card" data-module="API Gateway & Integrations">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-plug"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>API Gateway & Integrations</h3>
-                            <p>Manage and monitor API connections, ensuring smooth integrations between various systems.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="BBAdmin" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="admin1234" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">350</div>
-                                    <div class="stat-label">API Endpoints</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">120</div>
-                                    <div class="stat-label">Active Integrations</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <!-- Governance & Board Evaluation -->
-                    <a href="{% url 'board_evaluation_dashboard' %}" target="_blank" class="module-card" data-module="Governance & Board Evaluation">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-users-cog"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>Governance & Board Evaluation</h3>
-                            <p>Oversee governance practices and evaluate board performance for effective organizational management.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="governance_admin@gmail.com" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="govern2023" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">10</div>
-                                    <div class="stat-label">Evaluations</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">3</div>
-                                    <div class="stat-label">Active Boards</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                    
-                    <!-- Delegate Nomination & E-Voting -->
-                    <a href="{% url 'delegate_dashboard' %}" target="_blank" class="module-card" data-module="Delegate Nomination & E-Voting">
-                        <div class="module-header">
-                            <div class="module-icon">
-                                <i class="fas fa-vote-yea"></i>
-                            </div>
-                            <div class="module-actions">
-                                <div class="module-action">
-                                    <i class="fas fa-cog"></i>
-                                </div>
-                                <div class="module-action">
-                                    <i class="fas fa-ellipsis-h"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="module-content">
-                            <h3>Delegate Nomination & E-Voting</h3>
-                            <p>Manage delegate nominations and conduct secure electronic voting for organizational decisions.</p>
-                            
-                            <div class="credentials">
-                                <div class="credential-item">
-                                    <span class="credential-label">Username:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="voting_admin@gmail.com" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy username"></i>
-                                    </div>
-                                </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Password:</span>
-                                    <div class="credential-value">
-                                        <input type="password" value="vote2023" class="password-input" readonly>
-                                        <i class="fas fa-eye toggle-password" title="Show password"></i>
-                                        <i class="fas fa-copy copy-icon" title="Copy password"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="module-stats">
-                                <div class="stat">
-                                    <div class="stat-number">800</div>
-                                    <div class="stat-label">Nominations</div>
-                                </div>
-                                <div class="stat">
-                                    <div class="stat-number">600</div>
-                                    <div class="stat-label">Votes Cast</div>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
+                    <!-- CRM Module -->
+                   <!-- Compliance & Regulatory Reporting -->
+<a href="{% url 'compliance_dashboard' %}" target="_blank" class="module-card" data-module="Compliance & Regulatory Reporting">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-gavel"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Compliance & Regulatory Reporting</h3>
+        <p>Ensure adherence to industry regulations and generate comprehensive reports for compliance tracking.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="compliance_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="password123" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">500</div>
+                <div class="stat-label">Reports</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">45</div>
+                <div class="stat-label">Active Cases</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Advocacy & Campaign Mgmt -->
+<a href="{% url 'campaign_dashboard' %}" target="_blank" class="module-card" data-module="Advocacy & Campaign Mgmt">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-bullhorn"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Advocacy & Campaign Mgmt</h3>
+        <p>Manage and track campaigns, advocate for key issues, and engage with stakeholders.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="advocacy_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="campaign123" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">120</div>
+                <div class="stat-label">Campaigns</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">75</div>
+                <div class="stat-label">Active Advocates</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Publishing, Media & Advertising -->
+<a href="{% url 'advertising_dashboard' %}" target="_blank" class="module-card" data-module="Publishing, Media & Advertising">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-newspaper"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Publishing, Media & Advertising</h3>
+        <p>Manage content creation, media strategies, and advertising campaigns across multiple platforms.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="media_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="publish2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">500</div>
+                <div class="stat-label">Articles</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">30</div>
+                <div class="stat-label">Active Ads</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Audit Oversight -->
+<!-- <a href="#" class="module-card" data-module="Audit Oversight">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-search"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Audit Oversight</h3>
+        <p>Monitor and evaluate audits to ensure compliance and effectiveness in financial oversight.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="audit_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="audit2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">72</div>
+                <div class="stat-label">Audits</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">14</div>
+                <div class="stat-label">Active Reviews</div>
+            </div>
+        </div>
+    </div>
+</a> -->
+
+<!-- Customer Support & Service Desk -->
+<a href="https://supportticketfe.pythonanywhere.com/" target="_blank" class="module-card" data-module="Customer Support & Service Desk">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-headset"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Customer Support & Service Desk</h3>
+        <p>Support customers with their queries and issues, ensuring timely resolutions and satisfaction.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="support_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="1234" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">1,250</div>
+                <div class="stat-label">Tickets</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">310</div>
+                <div class="stat-label">Active Cases</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- API Gateway & Integrations -->
+<a href="https://www.iamkarthik.com/" target="_blank" class="module-card" data-module="API Gateway & Integrations">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-plug"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>API Gateway & Integrations</h3>
+        <p>Manage and monitor API connections, ensuring smooth integrations between various systems.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="BBAdmin" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="admin1234" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">350</div>
+                <div class="stat-label">API Endpoints</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">120</div>
+                <div class="stat-label">Active Integrations</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Governance & Board Evaluation -->
+<a href="{% url 'board_evaluation_dashboard' %}" target="_blank" class="module-card" data-module="Governance & Board Evaluation">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-users-cog"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Governance & Board Evaluation</h3>
+        <p>Oversee governance practices and evaluate board performance for effective organizational management.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="governance_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="govern2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">10</div>
+                <div class="stat-label">Evaluations</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">3</div>
+                <div class="stat-label">Active Boards</div>
+            </div>
+        </div>
+    </div>
+</a>
+
+<!-- Delegate Nomination & E-Voting -->
+<a href="{% url 'delegate_dashboard' %}" target="_blank" class="module-card" data-module="Delegate Nomination & E-Voting">
+    <div class="module-header">
+        <div class="module-icon">
+            <i class="fas fa-vote-yea"></i>
+        </div>
+        <div class="module-actions">
+            <div class="module-action">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="module-action">
+                <i class="fas fa-ellipsis-h"></i>
+            </div>
+        </div>
+    </div>
+    <div class="module-content">
+        <h3>Delegate Nomination & E-Voting</h3>
+        <p>Manage delegate nominations and conduct secure electronic voting for organizational decisions.</p>
+        
+        <div class="credentials">
+            <div class="credential-item">
+                <span class="credential-label">Username:</span>
+                <div class="credential-value">
+                    <input type="text" value="voting_admin@gmail.com" readonly>
+                    <i class="fas fa-copy copy-icon" title="Copy username"></i>
+                </div>
+            </div>
+            <div class="credential-item">
+                <span class="credential-label">Password:</span>
+                <div class="credential-value">
+                    <input type="password" value="vote2023" class="password-input" readonly>
+                    <i class="fas fa-eye toggle-password" title="Show password"></i>
+                    <i class="fas fa-copy copy-icon" title="Copy password"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="module-stats">
+            <div class="stat">
+                <div class="stat-number">800</div>
+                <div class="stat-label">Nominations</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">600</div>
+                <div class="stat-label">Votes Cast</div>
+            </div>
+        </div>
+    </div>
+</a>
+
                     
                     <!-- HR Module -->
                     <a href="https://fehr.pythonanywhere.com/"  target="_blank" class="module-card" data-module="HR & Payroll">
@@ -1668,7 +1808,7 @@
                         <div class="module-content">
                             <h3>Document Management</h3>
                             <p>Secure storage, version control, and collaboration for all organizational documents.</p>
-                            
+                            <p></p>
                             <div class="credentials">
                                 <div class="credential-item">
                                     <span class="credential-label">Username:</span>
@@ -1684,14 +1824,11 @@
                                         <i class="fas fa-eye toggle-password" title="Show password"></i>
                                         <i class="fas fa-copy copy-icon" title="Copy password"></i>
                                     </div>
+
                                 </div>
-                                <div class="credential-item">
-                                    <span class="credential-label">Company Code:</span>
-                                    <div class="credential-value">
-                                        <input type="text" value="KES-3581" readonly>
-                                        <i class="fas fa-copy copy-icon" title="Copy company code"></i>
-                                    </div>
-                                </div>
+                                 <span class="credential-label">Company Code:</span>
+                                                                    <input type="Company Code" value="KES-3581" class="form-control" readonly>
+
                             </div>
                             
                             <div class="module-stats">
@@ -1712,26 +1849,75 @@
     </div>
 
     <script>
-        // Toast notification
-        function showToast(message, isSuccess = true) {
-            const toast = document.getElementById('toast');
-            const toastMessage = document.getElementById('toastMessage');
+        // Login functionality
+        // const loginModal = document.getElementById('loginModal');
+        const loginForm = document.getElementById('loginForm');
+        const closeLogin = document.getElementById('closeLogin');
+        
+        // Check if user is already logged in (for demo purposes)
+        const isLoggedIn = localStorage.getItem('esaakiLoggedIn');
+        
+        // if(isLoggedIn) {
+        //     loginModal.classList.remove('active');
+        // } else {
+        //     // Show login modal by default
+        //     loginModal.classList.add('active');
+        // }
+        
+        // Handle login form submission
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            toastMessage.textContent = message;
-            toast.className = isSuccess ? 'toast success' : 'toast error';
-            toast.classList.add('show');
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Default credentials
+            if(email === 'admin@gmail.com' && password === '1234') {
+                localStorage.setItem('esaakiLoggedIn', 'true');
+                loginModal.classList.remove('active');
+            } else {
+                alert('Invalid credentials. Use admin@gmail.com / 1234');
+            }
+        });
+        
+        // Close login modal
+        closeLogin.addEventListener('click', function() {
+            loginModal.classList.remove('active');
+        });
+        
+        // Animate module cards on hover
+        const moduleCards = document.querySelectorAll('.module-card');
+        moduleCards.forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px)';
+                card.style.boxShadow = '0 15px 25px rgba(0, 0, 0, 0.15)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0)';
+                card.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
+            });
+        });
+        
+        // Animate stats bars on page load
+        const chartBars = document.querySelectorAll('.chart-bar');
+        chartBars.forEach(bar => {
+            const originalHeight = bar.style.height;
+            bar.style.height = '0';
             
             setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
+                bar.style.transition = 'height 1s ease';
+                bar.style.height = originalHeight;
+            }, 300);
+        });
+        
         // Password visibility toggle
         document.querySelectorAll('.toggle-password').forEach(icon => {
-            icon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                
+            icon.addEventListener('click', function(e)
+            
+         {
+            e.stopPropagation(); // prevent <a> navigation
+            e.preventDefault(); 
                 const passwordInput = this.parentElement.querySelector('.password-input');
                 if (passwordInput.type === 'password') {
                     passwordInput.type = 'text';
@@ -1748,17 +1934,13 @@
         // Copy to clipboard functionality
         document.querySelectorAll('.copy-icon').forEach(icon => {
             icon.addEventListener('click', function(e) {
-                e.stopPropagation();
-                e.preventDefault();
-                
+                e.stopPropagation(); // prevent <a> navigation
+        e.preventDefault();
                 const input = this.parentElement.querySelector('input');
                 input.select();
                 document.execCommand('copy');
                 
-                // Show toast notification
-                showToast('Copied to clipboard!');
-                
-                // Visual feedback
+                // Show feedback
                 const originalIcon = this.classList.contains('fa-copy') ? 'fa-copy' : 'fa-eye';
                 this.classList.remove(originalIcon);
                 this.classList.add('fa-check');
@@ -1766,7 +1948,7 @@
                 setTimeout(() => {
                     this.classList.remove('fa-check');
                     this.classList.add(originalIcon);
-                }, 2000);
+                }, 1500);
             });
         });
         
@@ -1821,32 +2003,6 @@
             allModuleCards.forEach(card => {
                 card.style.display = 'block';
             });
-        });
-        
-        // Animate module cards on hover
-        const moduleCards = document.querySelectorAll('.module-card');
-        moduleCards.forEach(card => {
-            card.addEventListener('mouseenter', () => {
-                card.style.transform = 'translateY(-8px)';
-                card.style.boxShadow = '0 15px 25px rgba(0, 0, 0, 0.15)';
-            });
-            
-            card.addEventListener('mouseleave', () => {
-                card.style.transform = 'translateY(0)';
-                card.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.1)';
-            });
-        });
-        
-        // Animate stats bars on page load
-        const chartBars = document.querySelectorAll('.chart-bar');
-        chartBars.forEach(bar => {
-            const originalHeight = bar.style.height;
-            bar.style.height = '0';
-            
-            setTimeout(() => {
-                bar.style.transition = 'height 1s ease';
-                bar.style.height = originalHeight;
-            }, 300);
         });
     </script>
 </body>
